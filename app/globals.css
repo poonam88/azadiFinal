@@ -1,0 +1,12 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Additional custom styles for Independence Day theme */
+.gradient-orange-green {
+  background: linear-gradient(135deg, #ff6b35, #ffffff, #138808);
+}
+
+.text-shadow {
+  text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+}
