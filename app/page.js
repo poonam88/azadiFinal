@@ -1,127 +1,181 @@
 "use client";
 import React, { useState, useEffect } from 'react';
+import { Users, BookOpen, Award, Clock, Send, Star, Calendar, MapPin, Sparkles } from 'lucide-react';
 
-const Send = () => <span>➤</span>;
-const Star = () => <span>⭐</span>;
-const Calendar = () => <span>📅</span>;
-const MapPin = () => <span>📍</span>;
-const BookOpen = () => <span>📚</span>;
-const Sparkles = () => <span>✨</span>;
-const Users = () => <span>👥</span>;
-const Award = () => <span>🏆</span>;
-const Clock = () => <span>⏰</span>;
-
+// Freedom fighters database
 const freedomFightersDB = {
-  "aruna asaf ali": {
-    name: "Aruna Asaf Ali",
-    alias: "Grand Old Lady of Independence", 
-    birth: "1909", death: "1996", region: "Delhi, Punjab",
-    bio: "Aruna Asaf Ali was a legendary freedom fighter who hoisted the Indian National Congress flag at Gowalia Tank Maidan in Bombay during the Quit India Movement of 1942.",
-    achievements: ["Hoisted Congress flag during Quit India Movement (1942)", "Organized underground resistance networks", "First woman Mayor of Delhi"],
-    quote: "The secret of political bargaining is to look more strong than what you really are.",
-    funFacts: ["Had a bounty of Rs. 5000 on her head", "Lived underground for 4 years", "Continued resistance even at age 80"],
-    rarity: "legendary"
-  },
   "matangini hazra": {
     name: "Matangini Hazra",
-    alias: "Gandhi Buri (Old Lady Gandhi)",
-    birth: "1869", death: "1942", region: "Bengal",
-    bio: "At 73, Matangini Hazra led thousands in the Quit India Movement in Bengal. This brave grandmother was shot by British police but kept walking forward with the tricolor.",
-    achievements: ["Led salt satyagraha at age 72", "Organized women's resistance groups", "Died holding the tricolor"],
-    quote: "Vande Mataram! I will die with the flag in my hands!",
-    funFacts: ["Started activism at age 60", "Called 'Gandhi Buri' by locals", "Shot 3 times but kept walking"],
-    rarity: "legendary"
+    alias: "Gandhi Buri",
+    birth: "1869",
+    death: "1942",
+    region: "Bengal",
+    rarity: "legendary",
+    bio: "Matangini Hazra was a revolutionary freedom fighter who became active in India's independence movement at the age of 60. She was shot three times by British police while leading a procession with the Indian flag but continued walking until she died.",
+    achievements: [
+      "Led Quit India Movement protests at age 73",
+      "Became symbol of elderly courage in freedom struggle",
+      "Inspired thousands of women to join independence movement"
+    ],
+    quote: "I will die, but I will not leave the flag",
+    funFacts: [
+      "Started her activism after becoming a widow at 18",
+      "Was called 'Gandhi Buri' (Old Lady Gandhi) by locals",
+      "Her last words were 'Vande Mataram'"
+    ]
   },
-  "alluri sitarama raju": {
-    name: "Alluri Sitarama Raju",
-    alias: "Manyam Veerudu (Hero of the Jungles)",
-    birth: "1897", death: "1924", region: "Andhra Pradesh", 
-    bio: "He led one of the most effective guerrilla campaigns against British rule from the hills and forests of Andhra Pradesh.",
-    achievements: ["Led Rampa Rebellion of 1922-24", "United tribal communities", "Master of guerrilla warfare"],
-    quote: "Freedom is our birthright, and we shall have it at any cost!",
-    funFacts: ["Fluent in Telugu and English", "Expert in traditional weapons", "British deployed entire battalions to capture him"],
-    rarity: "legendary"
-  },
-  "tirot sing": {
-    name: "Tirot Sing",
-    alias: "Lion of Meghalaya",
-    birth: "1802", death: "1835", region: "Meghalaya",
-    bio: "Tirot Sing was a Khasi chief who led armed resistance against British expansion in Northeast India.",
-    achievements: ["Led Anglo-Khasi War (1829-1833)", "United Khasi chiefs", "Guerrilla warfare expert"],
-    quote: "Our hills, our rules. No outsider shall dictate terms to the children of the soil!",
-    funFacts: ["Youngest chief at age 25", "War lasted 4 years", "Used jungle warfare tactics"],
-    rarity: "legendary"
-  },
-  "udham singh": {
-    name: "Udham Singh", 
-    alias: "Shaheed-i-Azam Sardar Udham Singh",
-    birth: "1899", death: "1940", region: "Punjab",
-    bio: "Udham Singh avenged the Jallianwala Bagh massacre by assassinating Michael O'Dwyer in London on March 13, 1940.",
-    achievements: ["Avenged Jallianwala Bagh massacre", "Assassinated Michael O'Dwyer in London", "Symbol of delayed justice"],
-    quote: "I did it because I had a grudge against him. He deserved it!",
-    funFacts: ["Waited 21 years for revenge", "Changed identity multiple times", "Refused to appeal death sentence"],
-    rarity: "rare"
-  },
-  "khudiram bose": {
-    name: "Khudiram Bose",
-    alias: "The Young Revolutionary",
-    birth: "1889", death: "1908", region: "Bengal",
-    bio: "At just 18, Khudiram Bose became one of the youngest martyrs of the Indian independence movement.",
-    achievements: ["Youngest revolutionary martyr", "Muzaffarpur bombing", "Inspired youth movement"],
-    quote: "I am proud to die for my motherland!",
-    funFacts: ["Executed at age 18", "Smiled while going to gallows", "Became inspiration for youth"],
-    rarity: "rare"
-  },
-  "begum hazrat mahal": {
-    name: "Begum Hazrat Mahal",
-    alias: "The Rebel Queen of Awadh",
-    birth: "1820", death: "1879", region: "Uttar Pradesh",
-    bio: "Begum Hazrat Mahal led the rebellion in Lucknow during the Indian Rebellion of 1857.",
-    achievements: ["Led 1857 rebellion in Lucknow", "Refused British offers", "Established independent government"],
-    quote: "I will never accept the dominance of the British!",
-    funFacts: ["Ruled Awadh independently", "Rejected British pension", "Died in exile in Nepal"],
-    rarity: "rare"
-  },
-  "birsa munda": {
-    name: "Birsa Munda",
-    alias: "Dharti Aba (Father of Earth)",
-    birth: "1875", death: "1900", region: "Jharkhand",
-    bio: "Birsa Munda led the tribal movement against British colonial rule and exploitation by landlords.",
-    achievements: ["Led Munda rebellion", "Protected tribal rights", "Fought against forced conversions"],
-    quote: "My people will be free from the chains of oppression!",
-    funFacts: ["Died at age 25", "Called 'Bhagwan' by tribals", "Jharkhand formed on his birth anniversary"],
-    rarity: "rare"
+  "aruna asaf ali": {
+    name: "Aruna Asaf Ali",
+    alias: "Grand Old Lady of Independence",
+    birth: "1909",
+    death: "1996",
+    region: "Delhi",
+    rarity: "legendary",
+    bio: "Aruna Asaf Ali was a prominent freedom fighter who hoisted the Congress flag during the Quit India Movement in 1942. She remained underground for four years with a bounty on her head.",
+    achievements: [
+      "Hoisted Indian National Congress flag during Quit India Movement",
+      "Lived underground for 4 years evading British police",
+      "Had Rs. 5000 bounty on her head"
+    ],
+    quote: "Freedom is not just a word, it's the essence of our existence",
+    funFacts: [
+      "First woman to hoist Congress flag at Gowalia Tank",
+      "Edited underground newsletter 'Inquilab'",
+      "Later became Delhi's first Mayor"
+    ]
   },
   "pritilata waddedar": {
     name: "Pritilata Waddedar",
-    alias: "The Brave Heart of Chittagong",
-    birth: "1911", death: "1932", region: "Bengal",
-    bio: "Pritilata Waddedar was a Bengali revolutionary who led an armed attack on the Pahartali European Club.",
-    achievements: ["Led Pahartali Club attack", "First woman to lead armed resistance", "Graduated with distinction"],
-    quote: "Freedom is our birthright and we shall achieve it!",
-    funFacts: ["Mathematics graduate", "Disguised as male for attack", "Youngest woman revolutionary leader"],
-    rarity: "epic"
+    alias: "Brave Heart of Chittagong",
+    birth: "1911",
+    death: "1932",
+    region: "Bengal",
+    rarity: "rare",
+    bio: "Pritilata Waddedar was a Bengali revolutionary who led an armed attack on the Pahartali European Club. She was one of the first women to participate in armed resistance against British rule.",
+    achievements: [
+      "Led attack on Pahartali European Club",
+      "First woman to lead armed resistance in Bengal",
+      "Mathematics graduate turned revolutionary"
+    ],
+    quote: "Death is preferable to a life of humiliation",
+    funFacts: [
+      "Disguised herself as a male during operations",
+      "Was a brilliant mathematics student",
+      "Took cyanide to avoid capture"
+    ]
   },
   "rani gaidinliu": {
     name: "Rani Gaidinliu",
     alias: "The Naga Queen",
-    birth: "1915", death: "1993", region: "Manipur",
-    bio: "Rani Gaidinliu was a Naga spiritual and political leader who led a revolt against British rule.",
-    achievements: ["Led Naga independence movement", "Imprisoned for 14 years", "Preserved Naga culture"],
-    quote: "My people's freedom is worth any sacrifice!",
-    funFacts: ["Started rebellion at age 13", "Imprisoned at 16", "Released only after independence"],
-    rarity: "epic"
+    birth: "1915",
+    death: "1993",
+    region: "Manipur",
+    rarity: "epic",
+    bio: "Rani Gaidinliu was a Naga spiritual and political leader who fought against British rule. She started her rebellion at age 13 and was imprisoned for 14 years.",
+    achievements: [
+      "Started rebellion against British at age 13",
+      "Imprisoned for 14 years by British",
+      "Protected Naga culture and traditions"
+    ],
+    quote: "My people and my land are my greatest treasures",
+    funFacts: [
+      "Jawaharlal Nehru gave her the title 'Rani'",
+      "Was released from prison only after independence",
+      "Became a symbol of Naga resistance"
+    ]
+  },
+  "khudiram bose": {
+    name: "Khudiram Bose",
+    alias: "Youngest Revolutionary Martyr",
+    birth: "1889",
+    death: "1908",
+    region: "Bengal",
+    rarity: "legendary",
+    bio: "Khudiram Bose was one of the youngest revolutionaries to be executed by the British. At just 18, he participated in the Muzaffarpur bombing and became a martyr for the independence cause.",
+    achievements: [
+      "Youngest martyr of independence movement at 18",
+      "Participated in Muzaffarpur bombing",
+      "Smiled while going to gallows"
+    ],
+    quote: "I am happy to die for my motherland",
+    funFacts: [
+      "Was selling books on streets before joining revolution",
+      "His execution sparked massive protests",
+      "Songs were written in his honor"
+    ]
+  },
+  "usha mehta": {
+    name: "Usha Mehta",
+    alias: "Voice of Freedom",
+    birth: "1920",
+    death: "2000",
+    region: "Gujarat",
+    rarity: "rare",
+    bio: "Usha Mehta was a freedom fighter who started the Secret Congress Radio during the Quit India Movement. She broadcast nationalist messages from hiding places in Mumbai.",
+    achievements: [
+      "Started Secret Congress Radio",
+      "Broadcast anti-British messages during Quit India Movement",
+      "Evaded British intelligence for months"
+    ],
+    quote: "The airwaves cannot be imprisoned",
+    funFacts: [
+      "Was only 22 when she started the radio",
+      "Used different hideouts to avoid detection",
+      "Later became a professor of political science"
+    ]
   }
 };
 
+// Quick prompts for user interaction
 const quickPrompts = [
-  "Tell me about Matangini Hazra",
-  "Women freedom fighters from Bengal", 
+  "Tell me about women freedom fighters",
+  "Heroes from Bengal",
   "Create Independence Day greeting",
-  "Tribal heroes who fought British",
-  "Freedom fighters from Punjab",
-  "Generate social media post"
+  "Tribal freedom fighters",
+  "Heroes from Tamil Nadu",
+  "Social media post"
 ];
+
+// Wikipedia search function
+const searchWikipedia = async (query) => {
+  try {
+    // Wikipedia API search
+    const searchUrl = `https://en.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(query)}`;
+    const response = await fetch(searchUrl);
+    
+    if (response.ok) {
+      const data = await response.json();
+      return {
+        title: data.title,
+        extract: data.extract,
+        found: true
+      };
+    }
+    
+    // Try alternative search
+    const searchQuery = `https://en.wikipedia.org/w/api.php?action=query&format=json&prop=extracts&exintro=true&explaintext=true&titles=${encodeURIComponent(query + " Indian freedom fighter")}&origin=*`;
+    const altResponse = await fetch(searchQuery);
+    
+    if (altResponse.ok) {
+      const altData = await altResponse.json();
+      const pages = altData.query.pages;
+      const pageId = Object.keys(pages)[0];
+      
+      if (pageId !== '-1' && pages[pageId].extract) {
+        return {
+          title: pages[pageId].title,
+          extract: pages[pageId].extract.slice(0, 500) + "...",
+          found: true
+        };
+      }
+    }
+    
+    return { found: false };
+  } catch (error) {
+    console.error('Wikipedia search failed:', error);
+    return { found: false };
+  }
+};
 
 const generateVisualCard = (heroData) => {
   const cardWindow = window.open('', 'GreetingCard', 'width=550,height=900,scrollbars=yes');
@@ -225,9 +279,32 @@ const generateVisualCard = (heroData) => {
 const generateAIResponse = async (userMessage, conversationHistory) => {
   await new Promise(resolve => setTimeout(resolve, 1000 + Math.random() * 2000));
   
-  const lowerMessage = userMessage.toLowerCase();
+  const lowerMessage = userMessage.toLowerCase().replace(/[^a-z\s]/g, '');
   
-  // Check for specific freedom fighters mentioned
+  // Helper function for fuzzy matching
+  const fuzzyMatch = (text, keywords) => {
+    return keywords.some(keyword => {
+      // Check for exact match
+      if (text.includes(keyword)) return true;
+      
+      // Check for partial matches (for typos)
+      const words = text.split(' ');
+      return words.some(word => {
+        // Allow 1-2 character differences for common typos
+        if (Math.abs(word.length - keyword.length) <= 2) {
+          let differences = 0;
+          const minLength = Math.min(word.length, keyword.length);
+          for (let i = 0; i < minLength; i++) {
+            if (word[i] !== keyword[i]) differences++;
+          }
+          return differences <= 2;
+        }
+        return false;
+      });
+    });
+  };
+  
+  // Check for specific freedom fighters mentioned in our database first
   for (const [key, fighter] of Object.entries(freedomFightersDB)) {
     if (lowerMessage.includes(key) || lowerMessage.includes(fighter.name.toLowerCase())) {
       return `🇮🇳 **${fighter.name} - "${fighter.alias}"**
@@ -250,8 +327,137 @@ This ${fighter.rarity} hero represents the true spirit of Indian independence! W
     }
   }
   
-  // Regional queries - Enhanced with more states
-  if (lowerMessage.includes('bengal')) {
+  // PRIORITY 1: Handle AI's built-in knowledge for specific freedom fighters
+  if (lowerMessage.includes('tirot sing') || lowerMessage.includes('tirot')) {
+    return `🇮🇳 **Tirot Sing (1802-1835) - "Lion of Meghalaya"**
+
+**Known as:** U Tirot Sing Syiem, Chief of Nongkhlaw
+
+**Background:**
+Tirot Sing was a Khasi chief who led the Anglo-Khasi War (1829-1832) against British colonial expansion in the Khasi Hills of present-day Meghalaya. He was one of the earliest freedom fighters to resist British rule in Northeast India.
+
+**🏆 Major Achievements:**
+• Led the first organized resistance against British in Northeast India
+• United multiple Khasi chiefs against colonial rule
+• Master of guerrilla warfare tactics in hilly terrain
+• Defended Khasi sovereignty and traditional governance
+
+**⚔️ The Anglo-Khasi War:**
+• Started in 1829 when British tried to build roads through Khasi territory
+• Tirot Sing refused to allow road construction without proper consultation
+• Led fierce resistance for nearly 4 years
+• Used knowledge of local terrain to outmaneuver British forces
+
+**💬 His Legacy:**
+"The hills are ours, and we will defend them with our lives"
+
+**🌟 Did You Know?**
+• He was captured in 1833 and died in British custody in 1835
+• Considered the first freedom fighter of Meghalaya
+• His resistance inspired future tribal movements across Northeast India
+• Meghalaya celebrates him as a state hero
+
+**This legendary tribal chief proved that the spirit of freedom burned bright in every corner of India! 🇮🇳**`;
+  }
+  
+  if (lowerMessage.includes('vo chidambaram') || lowerMessage.includes('chidambaram pillai')) {
+    return `🇮🇳 **V.O. Chidambaram Pillai (1872-1936) - "Kappalottiya Tamizhan"**
+
+**Known as:** The Tamil Helmsman, VOC
+
+**Background:**
+Vaanchinathan Olaganathan Chidambaram Pillai was a Tamil freedom fighter, lawyer, and entrepreneur who challenged British maritime monopoly. He was one of the first to use economic resistance as a tool against colonial rule.
+
+**🏆 Major Achievements:**
+• Founded Swadeshi Steam Navigation Company (1906)
+• First Indian to challenge British shipping monopoly
+• Organized successful boycott of British ships
+• Pioneer of economic nationalism in Tamil Nadu
+
+**⚔️ The Swadeshi Movement:**
+• Started steamship service between Tuticorin and Colombo
+• Broke British monopoly on sea trade
+• Employed thousands of Indians in maritime industry
+• Ships named after Indian heroes like "Bharati", "Lakshmibai"
+
+**💬 His Famous Quote:**
+"Even if we are reduced to poverty, we will fight for our rights and freedom!"
+
+**🌟 Did You Know?**
+• Called "Kappalottiya Tamizhan" (The Tamil Navigator)
+• Imprisoned and tortured by British for his activism
+• Lost his wealth fighting for freedom
+• Inspired Tamil maritime heritage and pride
+
+**His economic resistance showed that freedom could be won through commerce and self-reliance! 🇮🇳**`;
+  }
+  
+  if (lowerMessage.includes('subramania bharati') || (lowerMessage.includes('bharati') && !lowerMessage.includes('from'))) {
+    return `🇮🇳 **Subramania Bharati (1882-1921) - "Mahakavi Bharatiyar"**
+
+**Known as:** The Great Tamil Poet, Bharatiyar
+
+**Background:**
+Chinnaswami Subramania Bharati was a Tamil poet, freedom fighter, and social reformer. He used his powerful poetry to ignite patriotic fervor and inspire the independence movement across Tamil Nadu.
+
+**🏆 Major Achievements:**
+• Wrote revolutionary poems that inspired millions
+• Advocated for women's rights and gender equality
+• Promoted Hindi-Tamil unity and national integration
+• Pioneered modern Tamil literature and journalism
+
+**⚔️ Literary Revolution:**
+• Composed "Vande Mataram" in Tamil
+• Wrote "Bharata Devi" and "Janani Janmabhoomi"
+• Used simple Tamil to reach common people
+• Made poetry a weapon against British rule
+
+**💬 His Immortal Words:**
+"Yaadhum oore yaavarum kelir" (Every place is our home and all people are our kinsmen)
+
+**🌟 Did You Know?**
+• Lived in exile in Pondicherry to escape British persecution
+• Believed in women's liberation and education
+• Composed songs that are still sung in Tamil schools
+• Died young at 39 but left an immortal legacy
+
+**His words became the voice of Tamil freedom and continue to inspire generations! 🇮🇳**`;
+  }
+  
+  if (lowerMessage.includes('vanchinathan') && !lowerMessage.includes('from')) {
+    return `🇮🇳 **Vanchinathan (1886-1911) - "The Brave Avenger"**
+
+**Full Name:** Shankaran Vanchinathan
+
+**Background:**
+Vanchinathan was a Tamil freedom fighter who assassinated British collector Robert Ashe in 1911. His act of defiance was one of the most daring individual acts of resistance in early independence movement.
+
+**🏆 The Historic Act:**
+• Assassinated Collector Robert Ashe on June 17, 1911
+• Shot Ashe at Maniyachi railway station
+• Left a detailed note explaining his motives
+• Committed suicide to avoid capture
+
+**⚔️ His Mission:**
+• Protested against British oppression in Tamil regions
+• Avenged atrocities committed by British officials
+• Inspired by Swadeshi movement principles
+• Believed in ultimate sacrifice for motherland
+
+**💬 His Final Message:**
+"I alone am responsible for this deed. The government may do whatever they like with my dead body."
+
+**🌟 His Legacy:**
+• Became a martyr at just 25 years old
+• Inspired future Tamil revolutionaries
+• Symbol of fearless resistance in Tamil Nadu
+• His sacrifice motivated anti-British sentiment
+
+**His supreme sacrifice proved that even one determined individual could shake the mighty British Empire! 🇮🇳**`;
+  }
+  
+  // PRIORITY 2: Regional queries with fuzzy matching
+  if (fuzzyMatch(lowerMessage, ['bengal', 'bangla', 'west bengal'])) {
     return `🇮🇳 **Freedom Fighters from Bengal - The Revolutionary Land**
 
 Bengal was the epicenter of India's freedom movement! Here are some legendary heroes:
@@ -274,7 +480,7 @@ Bengal was the epicenter of India's freedom movement! Here are some legendary he
 Bengal's soil is soaked with the blood of heroes who dreamed of free India! Which of these brave souls would you like to know more about? 🌟`;
   }
   
-  if (lowerMessage.includes('tamil nadu') || lowerMessage.includes('tamilnadu') || lowerMessage.includes('tamil')) {
+  if (fuzzyMatch(lowerMessage, ['tamil nadu', 'tamilnadu', 'tamil', 'tn'])) {
     return `🇮🇳 **Freedom Fighters from Tamil Nadu - Land of Tamil Pride**
 
 Tamil Nadu produced many brave freedom fighters who fought for independence:
@@ -283,28 +489,20 @@ Tamil Nadu produced many brave freedom fighters who fought for independence:
 • Known as "Kappalottiya Tamizhan" (The Tamil Helmsman)
 • Started Swadeshi Steam Navigation Company
 • Challenged British shipping monopoly
-• Quote: "Even if we are reduced to poverty, we will fight for our rights!"
 
 **🔥 Subramania Bharati (1882-1921)**
 • Great Tamil poet and freedom fighter
 • Used poetry to inspire nationalism
 • Advocate for women's rights and social reform
-• Quote: "Yaadhum oore yaavarum kelir" (Every place is our home and all people are our kinsmen)
 
 **⚡ Vanchinathan (1886-1911)**
 • Assassinated British collector Robert Ashe
 • Martyr who gave his life for freedom
-• Left a note saying "I alone am responsible for this deed"
 
-**🏆 Tiruppur Kumaran (1904-1932)**
-• "Kodi Kaatha Kumaran" (Kumaran who protected the flag)
-• Died holding the Indian flag during protests
-• Symbol of Tamil pride and sacrifice
-
-Tamil Nadu's heroes showed that freedom burns in every Tamil heart! Want to know more about any specific Tamil hero? 🌟`;
+Tamil Nadu's heroes showed that freedom burns in every Tamil heart! 🌟`;
   }
   
-  if (lowerMessage.includes('punjab')) {
+  if (fuzzyMatch(lowerMessage, ['punjab', 'panjab'])) {
     return `🇮🇳 **Heroes from Punjab - Land of the Brave**
 
 Punjab gave us some of the most fearless freedom fighters:
@@ -327,7 +525,7 @@ Punjab gave us some of the most fearless freedom fighters:
 Punjab's soil is blessed with the blood of martyrs! Which Punjabi hero's story would you like to explore? 🌟`;
   }
   
-  if (lowerMessage.includes('maharashtra') || lowerMessage.includes('marathi')) {
+  if (fuzzyMatch(lowerMessage, ['maharashtra', 'marathi', 'mahaarastra', 'maharastra', 'maha', 'mumbai', 'pune'])) {
     return `🇮🇳 **Freedom Fighters from Maharashtra - The Maratha Spirit**
 
 Maharashtra has a rich tradition of freedom fighters:
@@ -350,7 +548,7 @@ Maharashtra has a rich tradition of freedom fighters:
 The Maratha spirit of independence runs deep! Want to know more about any Marathi hero? 🌟`;
   }
   
-  if (lowerMessage.includes('kerala') || lowerMessage.includes('malayalam')) {
+  if (fuzzyMatch(lowerMessage, ['kerala', 'malayalam', 'kochi', 'cochin', 'kerala state'])) {
     return `🇮🇳 **Freedom Fighters from Kerala - God's Own Warriors**
 
 Kerala contributed many brave souls to India's freedom struggle:
@@ -373,7 +571,7 @@ Kerala contributed many brave souls to India's freedom struggle:
 Kerala's coconut palms witnessed great sacrifices for freedom! Which Kerala hero inspires you? 🌟`;
   }
   
-  if (lowerMessage.includes('gujarat') || lowerMessage.includes('gujarati')) {
+  if (fuzzyMatch(lowerMessage, ['gujarat', 'gujarati', 'gujrat', 'ahmedabad', 'gandhi homeland'])) {
     return `🇮🇳 **Freedom Fighters from Gujarat - Gandhi's Homeland**
 
 Gujarat, the birthplace of Mahatma Gandhi, produced many freedom fighters:
@@ -396,8 +594,8 @@ Gujarat, the birthplace of Mahatma Gandhi, produced many freedom fighters:
 Gujarat's entrepreneurial spirit fueled the freedom movement! Want to explore more Gujarati heroes? 🌟`;
   }
   
-  // Women freedom fighters
-  if (lowerMessage.includes('women') && lowerMessage.includes('freedom')) {
+  // PRIORITY 3: Women freedom fighters
+  if (fuzzyMatch(lowerMessage, ['women', 'woman', 'female', 'ladies', 'girls']) && fuzzyMatch(lowerMessage, ['freedom', 'fighter', 'independence', 'warrior'])) {
     return `🇮🇳 **Brave Women Warriors of India's Freedom Movement**
 
 Our freedom wasn't won by men alone! Here are some incredible women heroes:
@@ -425,8 +623,8 @@ Our freedom wasn't won by men alone! Here are some incredible women heroes:
 These women proved that courage has no gender! Want to learn more about any specific woman warrior? 🌟`;
   }
   
-  // Independence Day greetings
-  if (lowerMessage.includes('greeting') || lowerMessage.includes('independence day')) {
+  // PRIORITY 4: Independence Day greetings
+  if (fuzzyMatch(lowerMessage, ['greeting', 'independence day', 'independence', 'august 15', 'aug 15', 'freedom day', 'azadi'])) {
     const randomFighter = Object.values(freedomFightersDB)[Math.floor(Math.random() * Object.values(freedomFightersDB).length)];
     return `🇮🇳 **Independence Day 2025 - Honoring Our Forgotten Heroes**
 
@@ -444,8 +642,8 @@ As we celebrate 78 years of freedom, let's honor the countless unsung heroes lik
 **Jai Hind! Vande Mataram! 🇮🇳**`;
   }
   
-  // Social media posts
-  if (lowerMessage.includes('social media') || lowerMessage.includes('post')) {
+  // PRIORITY 5: Social media posts
+  if (fuzzyMatch(lowerMessage, ['social media', 'post', 'instagram', 'facebook', 'twitter', 'linkedin', 'share', 'hashtag'])) {
     const randomFighter = Object.values(freedomFightersDB)[Math.floor(Math.random() * Object.values(freedomFightersDB).length)];
     return `📱 **Social Media Post Ready!**
 
@@ -468,8 +666,8 @@ Let's remember our forgotten heroes who gave everything for our freedom!
 *Perfect for Instagram, Facebook, Twitter, and LinkedIn! 🚀*`;
   }
   
-  // Tribal heroes
-  if (lowerMessage.includes('tribal') || lowerMessage.includes('tribe')) {
+  // PRIORITY 6: Tribal heroes
+  if (fuzzyMatch(lowerMessage, ['tribal', 'tribe', 'indigenous', 'adivasi', 'munda', 'santhal'])) {
     return `🇮🇳 **Tribal Warriors - Guardians of the Motherland**
 
 Our tribal heroes fought fiercely to protect their land and culture:
@@ -492,7 +690,106 @@ Our tribal heroes fought fiercely to protect their land and culture:
 These tribal warriors understood that protecting their land meant protecting India's soul! 🌟`;
   }
   
-  // Default response for unrecognized queries
+  // PRIORITY 7: Wikipedia fallback for other specific person queries
+  const specificPersonKeywords = ['tell me about', 'tell me more about', 'more about', 'who is', 'who was', 'about'];
+  const isAskingAboutPerson = specificPersonKeywords.some(keyword => lowerMessage.includes(keyword));
+  
+  if (isAskingAboutPerson) {
+    // Extract person name
+    let personName = lowerMessage;
+    specificPersonKeywords.forEach(keyword => {
+      personName = personName.replace(keyword, '').trim();
+    });
+    
+    // Clean the name
+    const cleanedName = personName.split(' ').filter(word => word.length > 1).join(' ');
+    
+    if (cleanedName.length > 2) {
+      try {
+        const wikiResult = await searchWikipedia(cleanedName);
+        
+        if (wikiResult.found) {
+          return `🇮🇳 **${wikiResult.title}** *(From Wikipedia)*
+
+${wikiResult.extract}
+
+📚 **Want to know more?** I found this information from Wikipedia. Feel free to ask specific questions about their achievements, quotes, or contributions to India's freedom struggle!
+
+*You can also try asking about freedom fighters from specific regions like "Heroes from Tamil Nadu" or "Bengal freedom fighters"* 🌟`;
+        } else {
+          // Try enhanced searches
+          const enhancedQueries = [
+            `${cleanedName} freedom fighter`,
+            `${cleanedName} Indian independence`,
+            `${cleanedName} India freedom movement`
+          ];
+          
+          for (const query of enhancedQueries) {
+            const result = await searchWikipedia(query);
+            if (result.found) {
+              return `🇮🇳 **${result.title}** *(From Wikipedia)*
+
+${result.extract}
+
+📚 **Want to know more?** I found this information from Wikipedia about this freedom fighter!
+
+*You can also ask about regional heroes or other freedom fighters* 🌟`;
+            }
+          }
+          
+          // If still not found
+          return `🔍 **Searching for "${cleanedName}"...**
+
+I couldn't find detailed information about "${cleanedName}" in my knowledge base or on Wikipedia. This could be because:
+
+• The name might be spelled differently
+• They might be a local hero not well-documented online
+• Try searching with their full name or alternative spellings
+
+**🌟 However, I can help you with:**
+• **Famous Freedom Fighters**: Bhagat Singh, Chandrashekhar Azad, Rani Lakshmibai
+• **Regional Heroes**: "Heroes from Tamil Nadu", "Bengal freedom fighters"  
+• **Women Warriors**: "Women freedom fighters"
+• **Tribal Heroes**: "Tribal freedom fighters"
+
+**Every hero deserves to be remembered! Let me know how else I can help you discover India's freedom fighters! 🇮🇳**`;
+        }
+      } catch (error) {
+        console.error('Wikipedia search error:', error);
+        return `⚠️ **Wikipedia Search Temporarily Unavailable**
+
+I'm having trouble connecting to Wikipedia right now, but I can still help you with:
+
+**🌟 Regional Heroes**: Ask about freedom fighters from any Indian state
+**👩‍⚔️ Women Warriors**: Learn about brave women who fought for freedom
+**🏛️ Historical Periods**: Explore different eras of the independence movement
+**🎯 Quick Questions**: Ask about well-known freedom fighters from my database
+
+Try asking: "Heroes from Tamil Nadu" or "Women freedom fighters" 🇮🇳`;
+      }
+    }
+  }
+  
+  // PRIORITY 8: Single name queries for Wikipedia search
+  const singleNameQuery = lowerMessage.trim();
+  if (singleNameQuery.split(' ').length <= 2 && singleNameQuery.length > 3) {
+    try {
+      const wikiResult = await searchWikipedia(singleNameQuery);
+      if (wikiResult.found) {
+        return `🇮🇳 **${wikiResult.title}** *(From Wikipedia)*
+
+${wikiResult.extract}
+
+📚 **Want to know more?** I found this information from Wikipedia. Feel free to ask specific questions about their achievements, quotes, or contributions to India's freedom struggle!
+
+*You can also try asking about freedom fighters from specific regions like "Heroes from Tamil Nadu" or "Bengal freedom fighters"* 🌟`;
+      }
+    } catch (error) {
+      console.error('Wikipedia search error:', error);
+    }
+  }
+  
+  // PRIORITY 9: Default response for unrecognized queries
   return `🇮🇳 **Welcome to the Journey of Forgotten Heroes!**
 
 I'm thrilled you're here to discover India's incredible freedom fighters! 🌟
@@ -505,8 +802,8 @@ I'm thrilled you're here to discover India's incredible freedom fighters! 🌟
 
 **🎯 Try asking me:**
 • "Tell me about freedom fighters from Tamil Nadu"
-• "Heroes from Maharashtra"
-• "Women freedom fighters from Bengal"
+• "Heroes from Bengal"
+• "Women freedom fighters"
 • "Create an Independence Day greeting"
 • "Tribal heroes who fought the British"
 
@@ -519,7 +816,7 @@ function FreedomFightersApp() {
   const [messages, setMessages] = useState([
     {
       type: 'ai',
-      content: "🙏 Namaste! I'm Itihaskar, your passionate AI historian! 🇮🇳\n\n🌟 On this glorious Independence Day, I'm here to share the incredible stories of India's forgotten freedom fighters. I can provide detailed information, create personalized greetings, and help you discover heroes from any region!\n\n🔥 What amazing story would you like to discover today?",
+      content: "🙏 Namaste! I'm Guruji, your passionate AI historian! 🇮🇳\n\n🌟 On this glorious Independence Day, I'm here to share the incredible stories of India's forgotten freedom fighters. I can provide detailed information, create personalized greetings, and help you discover heroes from any region!\n\n🔥 What amazing story would you like to discover today?",
       timestamp: "Just now"
     }
   ]);
@@ -689,21 +986,21 @@ function FreedomFightersApp() {
         <div style={{display: 'flex', justifyContent: 'center', gap: '2rem', marginBottom: '1rem', flexWrap: 'wrap'}}>
           <div style={{textAlign: 'center'}}>
             <div style={{display: 'flex', alignItems: 'center', gap: '0.25rem', justifyContent: 'center'}}>
-              <Users />
+              <Users size={20} />
               <span style={{fontWeight: 'bold', fontSize: '1.1rem', color: '#ea580c'}}>{stats.users.toLocaleString()}</span>
             </div>
             <span style={{fontSize: '0.875rem', color: '#6b7280'}}>Heroes Discovered</span>
           </div>
           <div style={{textAlign: 'center'}}>
             <div style={{display: 'flex', alignItems: 'center', gap: '0.25rem', justifyContent: 'center'}}>
-              <BookOpen />
+              <BookOpen size={20} />
               <span style={{fontWeight: 'bold', fontSize: '1.1rem', color: '#16a34a'}}>{stats.stories}</span>
             </div>
             <span style={{fontSize: '0.875rem', color: '#6b7280'}}>Stories Shared</span>
           </div>
           <div style={{textAlign: 'center'}}>
             <div style={{display: 'flex', alignItems: 'center', gap: '0.25rem', justifyContent: 'center'}}>
-              <Award />
+              <Award size={20} />
               <span style={{fontWeight: 'bold', fontSize: '1.1rem', color: '#2563eb'}}>{stats.greetings}</span>
             </div>
             <span style={{fontSize: '0.875rem', color: '#6b7280'}}>Greetings Created</span>
@@ -712,7 +1009,7 @@ function FreedomFightersApp() {
 
         <div style={{display: 'flex', justifyContent: 'center'}}>
           <div style={{display: 'flex', alignItems: 'center', gap: '0.5rem', padding: '0.5rem 1rem', background: '#fee2e2', borderRadius: '0.5rem'}}>
-            <Clock />
+            <Clock size={16} />
             <span style={{color: '#dc2626', fontWeight: '600'}}>Independence Day: Aug 15! 🇮🇳</span>
           </div>
         </div>
@@ -738,10 +1035,10 @@ function FreedomFightersApp() {
             <div style={{display: 'flex', alignItems: 'center', justifyContent: 'space-between'}}>
               <div style={{display: 'flex', alignItems: 'center', gap: '0.75rem'}}>
                 <div style={{width: '2.5rem', height: '2.5rem', background: 'linear-gradient(90deg, #f97316, #16a34a)', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
-                  <BookOpen />
+                  <BookOpen size={20} color="white" />
                 </div>
                 <div>
-                  <h2 style={{fontWeight: 'bold', color: '#1f2937', margin: 0}}>AI Itihaskar</h2>
+                  <h2 style={{fontWeight: 'bold', color: '#1f2937', margin: 0}}>AI Guruji</h2>
                   <div style={{display: 'flex', alignItems: 'center', gap: '0.25rem'}}>
                     <div style={{width: '0.5rem', height: '0.5rem', background: '#16a34a', borderRadius: '50%'}}></div>
                     <span style={{fontSize: '0.875rem', color: '#6b7280'}}>Powered by AI</span>
@@ -749,7 +1046,7 @@ function FreedomFightersApp() {
                 </div>
               </div>
               <div style={{display: 'flex', alignItems: 'center', gap: '0.5rem'}}>
-                <Sparkles />
+                <Sparkles size={16} />
                 <span style={{fontSize: '0.875rem', fontWeight: '600', color: '#4b5563'}}>Smart Responses</span>
               </div>
             </div>
@@ -825,7 +1122,7 @@ function FreedomFightersApp() {
                       <div style={{width: '0.5rem', height: '0.5rem', background: '#fb923c', borderRadius: '50%'}}></div>
                       <div style={{width: '0.5rem', height: '0.5rem', background: '#fb923c', borderRadius: '50%'}}></div>
                     </div>
-                    <span style={{fontSize: '0.875rem', color: '#6b7280'}}>AI Itihaskarji is thinking...</span>
+                    <span style={{fontSize: '0.875rem', color: '#6b7280'}}>AI Guruji is thinking...</span>
                   </div>
                 </div>
               </div>
@@ -870,7 +1167,7 @@ function FreedomFightersApp() {
                   opacity: (!input.trim() || isTyping) ? 0.5 : 1
                 }}
               >
-                <Send />
+                <Send size={16} />
               </button>
             </div>
             
@@ -909,7 +1206,7 @@ function FreedomFightersApp() {
               padding: '1.5rem'
             }}>
               <h3 style={{fontWeight: 'bold', fontSize: '1.125rem', marginBottom: '1rem', display: 'flex', alignItems: 'center', gap: '0.5rem'}}>
-                <Star />
+                <Star size={20} />
                 Featured Hero
               </h3>
               <div style={{textAlign: 'center', marginBottom: '1rem'}}>
@@ -924,11 +1221,11 @@ function FreedomFightersApp() {
               
               <div style={{marginBottom: '1rem', fontSize: '0.875rem'}}>
                 <div style={{display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.5rem'}}>
-                  <Calendar />
+                  <Calendar size={16} />
                   <span><strong>{selectedFighter.birth} - {selectedFighter.death}</strong></span>
                 </div>
                 <div style={{display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.5rem'}}>
-                  <MapPin />
+                  <MapPin size={16} />
                   <span><strong>{selectedFighter.region}</strong></span>
                 </div>
                 <div style={{display: 'flex', alignItems: 'center', gap: '0.5rem'}}>
