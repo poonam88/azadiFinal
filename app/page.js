@@ -816,7 +816,7 @@ function FreedomFightersApp() {
   const [messages, setMessages] = useState([
     {
       type: 'ai',
-      content: "🙏 Namaste! I'm Guruji, your passionate AI historian! 🇮🇳\n\n🌟 On this glorious Independence Day, I'm here to share the incredible stories of India's forgotten freedom fighters. I can provide detailed information, create personalized greetings, and help you discover heroes from any region!\n\n🔥 What amazing story would you like to discover today?",
+      content: "🙏 Namaste! I'm Itihaskar, your passionate AI historian! 🇮🇳\n\n🌟 On this glorious Independence Day, I'm here to share the incredible stories of India's forgotten freedom fighters. I can provide detailed information, create personalized greetings, and help you discover heroes from any region!\n\n🔥 What amazing story would you like to discover today?",
       timestamp: "Just now"
     }
   ]);
