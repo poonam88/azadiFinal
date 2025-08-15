@@ -1038,7 +1038,7 @@ function FreedomFightersApp() {
                   <BookOpen size={20} color="white" />
                 </div>
                 <div>
-                  <h2 style={{fontWeight: 'bold', color: '#1f2937', margin: 0}}>AI Guruji</h2>
+                  <h2 style={{fontWeight: 'bold', color: '#1f2937', margin: 0}}>AI Itihaskar</h2>
                   <div style={{display: 'flex', alignItems: 'center', gap: '0.25rem'}}>
                     <div style={{width: '0.5rem', height: '0.5rem', background: '#16a34a', borderRadius: '50%'}}></div>
                     <span style={{fontSize: '0.875rem', color: '#6b7280'}}>Powered by AI</span>
@@ -1122,7 +1122,7 @@ function FreedomFightersApp() {
                       <div style={{width: '0.5rem', height: '0.5rem', background: '#fb923c', borderRadius: '50%'}}></div>
                       <div style={{width: '0.5rem', height: '0.5rem', background: '#fb923c', borderRadius: '50%'}}></div>
                     </div>
-                    <span style={{fontSize: '0.875rem', color: '#6b7280'}}>AI Guruji is thinking...</span>
+                    <span style={{fontSize: '0.875rem', color: '#6b7280'}}>AI Itihaskar is thinking...</span>
                   </div>
                 </div>
               </div>
